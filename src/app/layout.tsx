@@ -28,8 +28,10 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <Navbar />
-        {children}
-        <Footer />
+        <main className="flex flex-col m-h-[calc(100vh-3.5rem-1px)]">
+          <div className="flex-1 flex flex-col h-full">{children}</div>
+          <Footer />
+        </main>
       </body>
     </html>
   );
