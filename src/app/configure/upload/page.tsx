@@ -5,8 +5,10 @@ import { useUploadThing } from "@/lib/uploadthing";
 import { cn } from "@/lib/utils";
 import { Image, Loader2, MousePointerSquareDashed } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { title } from "process";
 import { useState, useTransition } from "react";
 import Dropzone, { FileRejection } from "react-dropzone";
+import { toast } from "sonner";
 
 const Page = () => {
   const [isDragOver, setIsDragOver] = useState(false);
@@ -15,7 +17,7 @@ const Page = () => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
-  const {} = useUploadThing("imageUploader", {
+  const { startUpload } = useUploadThing("imageUploader", {
     onClientUploadComplete: ([data]) => {
       const configId = data.serverData.configId;
       startTransition(() => {
@@ -26,8 +28,18 @@ const Page = () => {
       setUploadProgress(p);
     },
   });
-  const onDropRejected = () => {};
-  const onDropAccepted = () => {};
+  const onDropRejected = (rejectedFiles: FileRejection[]) => {
+    const [file] = rejectedFiles;
+    setIsDragOver(false);
+    toast(`${file.file.type} type is not supported.`, {
+      description: "Please upload a PNG, JPG, or JPEG file.",
+      duration: 4000,
+    });
+  };
+  const onDropAccepted = (acceptedFiles: File[]) => {
+    startUpload(acceptedFiles, { configId: undefined });
+    setIsDragOver(false);
+  };
 
   return (
     <div
