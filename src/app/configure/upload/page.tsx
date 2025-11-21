@@ -13,11 +13,10 @@ import { toast } from "sonner";
 const Page = () => {
   const [isDragOver, setIsDragOver] = useState(false);
   const [uploadProgress, setUploadProgress] = useState<number>(45);
-  const isUploading = false;
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
-  const { startUpload } = useUploadThing("imageUploader", {
+  const { startUpload, isUploading } = useUploadThing("imageUploader", {
     onClientUploadComplete: ([data]) => {
       const configId = data.serverData.configId;
       startTransition(() => {
@@ -28,6 +27,7 @@ const Page = () => {
       setUploadProgress(p);
     },
   });
+
   const onDropRejected = (rejectedFiles: FileRejection[]) => {
     const [file] = rejectedFiles;
     setIsDragOver(false);
@@ -36,6 +36,7 @@ const Page = () => {
       duration: 4000,
     });
   };
+
   const onDropAccepted = (acceptedFiles: File[]) => {
     startUpload(acceptedFiles, { configId: undefined });
     setIsDragOver(false);
