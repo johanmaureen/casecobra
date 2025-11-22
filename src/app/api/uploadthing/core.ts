@@ -1,3 +1,4 @@
+import "dotenv/config";
 import sharp from "sharp";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { z } from "zod";
@@ -26,6 +27,7 @@ export const ourFileRouter = {
 
       console.log("Image dimensions:", width, height);
       console.log("configId:", configId);
+      console.log("process.env.DATABASE_URL,", process.env.DATABASE_URL);
       if (!configId) {
         const configuration = await prisma.configuration.create({
           data: {
@@ -34,6 +36,7 @@ export const ourFileRouter = {
             height: height || 500,
           },
         });
+        console.log("configuration:", configuration);
         return { configId: configuration.id };
       } else {
         const updatedConfiguration = await prisma.configuration.update({

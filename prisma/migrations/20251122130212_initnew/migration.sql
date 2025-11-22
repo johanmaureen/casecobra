@@ -41,7 +41,6 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "Order" (
     "id" TEXT NOT NULL,
-    "configurationId" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "amount" DOUBLE PRECISION NOT NULL,
     "isPaid" BOOLEAN NOT NULL DEFAULT false,
@@ -82,8 +81,8 @@ CREATE TABLE "BillingAddress" (
     CONSTRAINT "BillingAddress_pkey" PRIMARY KEY ("id")
 );
 
--- AddForeignKey
-ALTER TABLE "Order" ADD CONSTRAINT "Order_configurationId_fkey" FOREIGN KEY ("configurationId") REFERENCES "Configuration"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+-- CreateIndex
+CREATE UNIQUE INDEX "Configuration_id_key" ON "Configuration"("id");
 
 -- AddForeignKey
 ALTER TABLE "Order" ADD CONSTRAINT "Order_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
